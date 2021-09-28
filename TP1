@@ -1,0 +1,63 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Sep 19 13:16:48 2021
+
+@author: happy
+"""
+import numpy as np
+import pandas as pd
+import csv
+#%% See what python see
+data="D:/perso/RIGA/Computer Telecom/TP1/DataLucas.csv"
+fils=open(data)
+data1=csv.reader(fils)
+i=0
+for line in data1:
+    i+=1
+    print(line)
+    if i==5:
+        break
+#%%
+cars1=np.loadtxt(data,dtype=str,delimiter=";")
+#%%
+columnes=cars1[0,1:]
+main=cars1[1:,1:]
+index=cars1[1:,0]
+cars=pd.DataFrame(data=main,index=index,columns=columnes)
+
+#%% Parti 1
+print("The number of row is:"+str(cars.shape[0]))
+print("the label of the columns is: "+str(cars.columns[0])+", "+str(cars.columns[1])+", "+str(cars.columns[2])+", "+str(cars.columns[3])+" and "+str(cars.columns[4]))
+print("the row with red in it:\n"+str(cars.loc[cars["color"]=="Red"]))
+print("the row without 1992 in it:\n"+str(cars.loc[cars["car_year"]!="1992"]))
+#%% Partie 2
+main_0_5=cars1[1:6,1:]
+index_0_5=cars1[1:6,0]
+
+main_996_1000=cars1[-5:,1:]
+index_996_1000=cars1[-5:,0]
+
+cars_0_5=pd.DataFrame(data=main_0_5,index=index_0_5,columns=columnes)
+cars_0_5_price=cars_0_5["price"]
+
+cars_996_1000=pd.DataFrame(data=main_996_1000,index=index_996_1000,columns=columnes)
+cars_996_1000_price=cars_996_1000["price"]
+#%%Convertisation
+
+for line in range(1,6):
+    cars_0_5_price.at[str(line)]=float(cars_0_5_price.at[str(line)][3:8]+"."+cars_0_5_price.at[str(line)][9:])
+cars_0_5_pricefloat=cars_0_5_price.to_numpy()
+
+for line in range(996,1001):
+    cars_996_1000_price.at[str(line)]=float(cars_996_1000_price.at[str(line)][3:8]+"."+cars_996_1000_price.at[str(line)][9:])
+cars_996_1000_pricefloat=cars_996_1000_price.to_numpy()
+#%% Partie 2.1
+print("the minimun of the 5 first row is: "+str(min(cars_0_5_pricefloat)))
+print("the max of the 5 first row is: "+str(max(cars_0_5_pricefloat)))
+print("the sum of the 5 first row is: "+str(sum(cars_0_5_pricefloat)))
+print("the median of the 5 first row is: "+str(np.median(cars_0_5_pricefloat)))
+#%% Partie 2.2
+print("the minimun of the 5 last row is: "+str(min(cars_996_1000_pricefloat)))
+print("the max of the 5 last row is: "+str(max(cars_996_1000_pricefloat)))
+print("the sum of the 5 last row is: "+str(sum(cars_996_1000_pricefloat)))
+print("the median of the 5 last row is: "+str(np.median(cars_996_1000_pricefloat)))
